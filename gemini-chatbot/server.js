@@ -13,7 +13,7 @@ app.use(cors({
 const upload = multer({ dest: 'uploads/' });
 const port = 3000;
 
-const API_KEY = "AIzaSyDl8IHhDXss3cbGt5-DRZINXxefcbM7zRk"
+const API_KEY = "YOUR-KEY"
 
 const fileManager = new GoogleAIFileManager(API_KEY);
 
