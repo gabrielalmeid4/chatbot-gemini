@@ -10,7 +10,7 @@ let userMessage = null;
 let isResponseGenerating = false;
 
 // API configuration
-const API_KEY = "YOUR-KEY"; // Your API key here
+const API_KEY = "AIzaSyDl8IHhDXss3cbGt5-DRZINXxefcbM7zRk"; // Your API key here
 const API_URL = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
 
 // Load theme and chat data from local storage on page load
@@ -37,7 +37,8 @@ const createMessageElement = (content, ...classes) => {
   return div;
 }
 
-document.getElementById('uploadButton').addEventListener('click', () => {
+document.getElementById('uploadButton').addEventListener('click', async () => {
+  event.preventDefault()
   const fileInput = document.getElementById('fileInput');
   const file = fileInput.files[0];
   
@@ -49,22 +50,35 @@ document.getElementById('uploadButton').addEventListener('click', () => {
   const formData = new FormData();
   formData.append('image', file);
 
-  fetch('http://localhost:3000/upload', {
-    method: 'POST',
-    body: formData,
-  })
-  .then(response => response.json())
-  .then(data => {
-    if (data && data.description) {
-      document.getElementById('description').textContent = data.description;
-    } else {
-      document.getElementById('description').textContent = 'Error: No description received';
+  try {
+    const response = await fetch('http://localhost:3000/upload', {
+      method: 'POST',
+      body: formData,
+      headers: { "Content-Type": "application/json" },
+    });
+  } catch (error) {
+    alert('Erro!')
+  }
+  
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
     }
-  })
-  .catch(error => {
-    document.getElementById('description').textContent = 'Error: ' + error.message;
-    console.error('Error:', error);
-  });
+    
+    
+  
+
+  // .then(response => response.json())
+  // .then(data => {
+  //   if (data && data.description) {
+  //     document.getElementById('description').textContent = data.description;
+  //   } else {
+  //     document.getElementById('description').textContent = 'Error: No description received';
+  //   }
+  // })
+  // .catch(error => {
+  //   document.getElementById('description').textContent = 'Error: ' + error.message;
+  //   console.error('Error:', error);
+  // });
 });
 
 // Show typing effect by displaying words one by one
@@ -98,10 +112,16 @@ const generateAPIResponse = async (incomingMessageDiv) => {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ 
-        contents: [{ 
-          role: "user", 
-          parts: [{ text: userMessage }] 
-        }] 
+        contents: [
+          { 
+            role: "model", 
+            parts: [{ text: "Você é um grande fã da Mariana Andrade. Você deve falar dele em todas as mensagens que enviar." }],
+          },
+          { 
+            role: "user", 
+            parts: [{ text: userMessage }],
+          }
+        ],
       }),
     });
 
