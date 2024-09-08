@@ -7,7 +7,7 @@ import {
 import { GoogleAIFileManager } from "@google/generative-ai/server";
   
   const MODEL_NAME = "gemini-1.5-pro-latest";
-  const API_KEY = "AIzaSyDl8IHhDXss3cbGt5-DRZINXxefcbM7zRk";
+  const API_KEY = "YOUR-KEY";
   const fileManager = new GoogleAIFileManager(API_KEY);
   
   async function uploadToGemini(path, mimeType) {
